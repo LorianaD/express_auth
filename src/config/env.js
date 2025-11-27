@@ -5,7 +5,7 @@ dotenv.config();
 
 // lister et vérifier les infos nécésssaires pour demarrer l'app
 const required = ['DB_HOST', 'DB_USER', 'DB_NAME', 'JWT_TOKEN'];
-console.log(required);
+// console.log(required);
 
 for (const key of required) {
     if (!process.env[key]) {

@@ -7,14 +7,14 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
-app.get('/test', (req, res) => {
+app.get('/test', (req, res)=>{
     console.log('route de test ok');
     res.send('route de test ok');
 })
 
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 // middleware qui gere les erreurs, capture tout type d'erreur et renvoi une response
 app.use((err, req, res, next) =>{

@@ -12,5 +12,5 @@ export const pool = mysql.createPool({
 
 export async function testConnection() {
     const [rows] = await pool.query('SELECT NOW() AS now');
-    console.log('co a mysql ok a, ',rows[0].now);
+    // console.log('co a mysql ok a, ',rows[0].now);
 }
