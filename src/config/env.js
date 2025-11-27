@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // lister et vérifier les infos nécésssaires pour demarrer l'app
-const required = ['DB_HOST', 'DB_USER', 'DB_NAME', 'JWT_TOKEN'];
+const required = ['DB_HOST', 'DB_USER', 'DB_NAME', 'JWT_SECRET'];
 // console.log(required);
 
 for (const key of required) {
@@ -22,5 +22,5 @@ export const env = {
         password: process.env.DB_PASS ?? '',
         database: process.env.DB_NAME
     },
-    jwtSecret: process.env.JWT_TOKEN
+    jwtSecret: process.env.JWT_SECRET
 }

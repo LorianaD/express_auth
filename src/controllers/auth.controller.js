@@ -30,19 +30,26 @@ export async function loginController (req, res, next) {
         //on recupere email et mdp
         const { email, password} = req.body;
         //on cherche le user dans db
-        const [rows] = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+        const [rows] = await pool.execute(
+            'SELECT * FROM users WHERE email = ?', 
+            [email]
+        );
         const user = rows[0];
         
         //on gere le cas ou on ne trouve pas de user
         if(!user){
             console.log('user introuvable');
-            return res.status(401).json({error: 'user introuvable'});
+            return res.status(401).json({
+                error: 'user introuvable'
+            });
         }
         //On compare le mdp fournis avec le mdp hash de la db
         const match = await bcrypt.compare(password, user.password_hash);
         if(!match) {
             console.log('mdp incorrect');
-            return res.status(401).json({error:'mdp incorrect'});
+            return res.status(401).json({
+                error:'mdp incorrect'
+            });
         }
         //on genere un token avec jwt
         const token = jwt.sign(
@@ -61,4 +68,7 @@ export async function loginController (req, res, next) {
 //controller profile
 export async function profileController(req, res) {
     console.log(req.user);
+    res.json({
+        user: req.user
+    });
 }

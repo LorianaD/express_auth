@@ -1,31 +1,34 @@
-// outils des token -> jwt
+//outil des token -> jwt
 import jwt from 'jsonwebtoken';
-// var d'envirennement via notre fichier de config
+//var d'environnement via notre fichier de config
 import {env} from '../config/env.js';
-// outil de connexion
-import { pool } from '../db/index.js'
+//outil de connexion
+import { pool } from '../db/index.js';
 
-export async function authenticate(req, res) {
+export async function authenticate(req, res, next) {
     try {
-        // récupérer le token
-        const authorization = req.header.authorization;
-        const token = authorization.replace('BEARER', '');
-        // gere le cas ou pas de token
-        if (!token) {
+        //recuperer le token
+        const authorization = req.headers.authorization;
+        const token = authorization.replace('Bearer ', '');
+        //gere le cas ou pas de token
+        if(!token){
             return res.status(401).json({
-                error: 'token non trouve'
+                error: 'pas de token'
             })
         }
-        // vérification du token avec verify
+        //verification du token avec verify
         const payload = jwt.verify(token, env.jwtSecret);
-        // recuperer le user
-        const [ rows ] = await pool.execute('SELECT id, email, created_at FROM users WHERE id = ?', [payload.sub]);
-        if (!rows[0]) {
+        //recuperer le user
+        const [rows] = await pool.execute(
+            'SELECT id, email, created_at, password_hash FROM users WHERE id = ?', 
+            [ payload.sub]
+        );
+        if(!rows[0]){
             return res.status(401).json({
                 error: 'user inexistant'
             });
         }
-        // ???
+        //???
         req.user = rows[0];
         next();
     } catch (error) {
