@@ -12,21 +12,17 @@ export async function authenticate(req, res, next) {
         const token = authorization.replace('Bearer ', '');
         //gere le cas ou pas de token
         if(!token){
-            return res.status(401).json({
-                error: 'pas de token'
-            })
+            return res.status(401).json({error: 'pas de token'})
         }
         //verification du token avec verify
         const payload = jwt.verify(token, env.jwtSecret);
         //recuperer le user
         const [rows] = await pool.execute(
-            'SELECT id, email, created_at, password_hash FROM users WHERE id = ?', 
-            [ payload.sub]
+            'SELECT id, email, birth_date, birth_city, created_at FROM users WHERE id = ?', 
+            [ payload.sub ]
         );
         if(!rows[0]){
-            return res.status(401).json({
-                error: 'user inexistant'
-            });
+            return res.status(401).json({error: 'user inexistant'});
         }
         //???
         req.user = rows[0];

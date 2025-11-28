@@ -53,7 +53,10 @@ export async function loginController (req, res, next) {
         }
         //on genere un token avec jwt
         const token = jwt.sign(
-            {sub: user.id, email: user.email}, //payload (info minimum du token)
+            {
+                sub: user.id, 
+                email: user.email
+            }, //payload (info minimum du token)
             env.jwtSecret, //clé secret de mon .env que je recupere via mon fichier env.js
             { expiresIn: '1h'} //durée de validité du token
         )
